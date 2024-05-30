@@ -30,32 +30,46 @@ int main()
     cin.tie(NULL); 
     
 
-    int t; cin>>t; 
+    int t; cin>>t;
 
-    while( t--){
-        int n; cin>>n; 
-        
+    while(t--){
+        int n, k;
+        cin>>n>>k; 
+
         vi v(n);
-        for(int i = 0; i < n; i++) cin>>v[i]; 
 
-        map<tuple<int, int, int>, int> mp; 
-
-        ll ans = 0; 
-
-        for(int i = 0; i < n - 2; i++){
-            tuple <int, int, int> triple = make_tuple(v[i], v[i+1], v[i+2]); 
-            vector <tuple<int, int, int>> temp(3); 
-            temp[0] = make_tuple(0, v[i+1], v[i+2]);
-            temp[1] = make_tuple(v[i], 0, v[i+2]);
-            temp[2] = make_tuple(v[i], v[i+1], 0);
-
-            for(auto &tri : temp){
-                ans += mp[tri] - mp[triple]; 
-                mp[tri]++;
-            }
-            mp[triple]++;
+        for(int i = 0; i < n; i++){
+            cin>>v[i];
         }
-        cout << ans << endl; 
-    }
+
+        vi suffix(n, 0); 
+        suffix[n-1] = 1;
+        for(int i = n-2; i >= 0; i--){
+            suffix[i] = suffix[i+1] + (v[i] == v[n-1]);
+        }
+
+        if(v[0] == v[n-1]){
+            if(suffix[0] % k == 0 or suffix[0] >= k){
+                yes;
+                continue;
+            }
+        }
+
+        bool ok = false;
+        int cnt = 0;
+
+        for(int i = 0; i <= n-2; i++){
+            cnt +=(v[i] == v[0]);
+            if(cnt % k == 0 and suffix[i+1] >= k){
+                ok = true;
+                break;
+            }
+        }
+
+        if(ok) yes;
+        else no;
+
+    } 
+
     return 0; 
 }
