@@ -4,7 +4,7 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-template <typename T> using order_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using order_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 #define yes cout << "YES\n"
 #define no cout << "NO\n"
@@ -30,21 +30,36 @@ int main()
     cin.tie(NULL); 
     
 
-    int n, k; 
+    ll n, k; 
     cin>>n>>k; 
 
-    vi v(n); 
-
+    vll v(n); 
     for(int i = 0; i < n; i++) cin>>v[i]; 
 
-    ll left = 0, right = 0, ans = 0; 
-    
-    order_set <int> os; 
-    
-    while(right < n){
-        if((right - left + 1) == k){
-            
-        }
+    order_set <ll> os; 
+    for(int i  = 0; i < k; i++){
+        os.insert(v[i]); 
     }
+
+    ll odd_m = *os.find_by_order((k+1)/ 2 - 1); 
+    ll sum = 0; 
+    for(int i = 0; i < k; i++){
+        sum += abs(v[i] - odd_m);
+    }
+
+    cout << sum << " ";
+
+    for(int i = 0; i < n - k; i++){
+        os.erase(os.find_by_order(os.order_of_key(v[i])));
+        os.insert(v[i+k]);
+        ll m = *os.find_by_order((k+1)/2 - 1);
+        sum += abs(m - v[i + k]) - abs(odd_m - v[i]);
+        if(k % 2 == 0){
+            sum -= (m - odd_m);
+        }
+        odd_m = m; 
+        cout << sum << " "; 
+    }
+
     return 0; 
 }
