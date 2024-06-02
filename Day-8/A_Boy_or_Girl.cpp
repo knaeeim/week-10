@@ -4,7 +4,7 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-template <typename T> using order_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using order_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 #define yes cout << "YES\n"
 #define no cout << "NO\n"
@@ -30,23 +30,21 @@ int main()
     cin.tie(NULL); 
     
 
-    int t; cin>>t; 
+    string s; cin>>s; 
 
-    while(t--){
-        ll n; cin>>n; 
+    sorta(s); 
 
-        vll v(n); 
-        for(int i = 0; i < n; i++) cin>>v[i]; 
-
-        order_set <ll> os; 
-        ll ans = 0, c = 0;
-        for(int i = 0; i < n; i++){
-            c++;
-            os.insert(v[i]);
-            ans += (c - os.order_of_key(v[i]) - 1);
+    char ch = s[s.size() - 1];
+    int ans = 0; 
+    for(int i = 0; i < s.size(); i++){
+        if(s[i] != ch){
+            ans++;
+            ch = s[i];
         }
-
-        cout << ans << endl;
     }
+
+    if(ans % 2 == 0) cout << "CHAT WITH HER!" << endl; 
+    else cout << "IGNORE HIM!" << endl;
+
     return 0; 
 }

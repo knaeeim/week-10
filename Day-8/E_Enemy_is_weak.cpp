@@ -4,7 +4,9 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-template <typename T> using order_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using order_set1 = tree<T, null_type, greater<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+template <typename T> using order_set2 = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 #define yes cout << "YES\n"
 #define no cout << "NO\n"
@@ -30,23 +32,32 @@ int main()
     cin.tie(NULL); 
     
 
-    int t; cin>>t; 
+    int n; cin>>n; 
 
-    while(t--){
-        ll n; cin>>n; 
+    vi v1(n), v2(n); 
 
-        vll v(n); 
-        for(int i = 0; i < n; i++) cin>>v[i]; 
+    order_set1 <int> os1; 
+    order_set2 <int> os2; 
 
-        order_set <ll> os; 
-        ll ans = 0, c = 0;
-        for(int i = 0; i < n; i++){
-            c++;
-            os.insert(v[i]);
-            ans += (c - os.order_of_key(v[i]) - 1);
-        }
-
-        cout << ans << endl;
+    for(int i = 0; i < n; i++){
+        cin>>v1[i]; 
+        os1.insert(v1[i]); 
+        v2[i] = os1.order_of_key(v1[i]); 
     }
+
+    // range(v1); 
+    // cout << endl; 
+    // range(v2); 
+    // cout << endl; 
+
+    ll ans = 0;
+
+    for(int i = n - 1; i >= 0; i--){
+        // cout << v1[i] << " " << os2.order_of_key(v1[i]) << endl; 
+        os2.insert(v1[i]); 
+        ans += (os2.order_of_key(v1[i]) * v2[i]);
+    }
+
+    cout << ans << endl; 
     return 0; 
 }

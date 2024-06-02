@@ -4,7 +4,7 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-template <typename T> using order_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using order_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 #define yes cout << "YES\n"
 #define no cout << "NO\n"
@@ -23,6 +23,9 @@ template <typename T> using order_set = tree<T, null_type, less_equal<T>, rb_tre
 #define Unique(X) (X).erase(unique((X).begin(),(X).end()),(X).end())
 #define range(arr) for(auto el: arr) cout<<el<<" ";
 
+bool cmp(pair<ll,ll> a, pair<ll, ll> b){
+    return a.first < b.first; 
+}
 
 int main()
 {
@@ -33,20 +36,34 @@ int main()
     int t; cin>>t; 
 
     while(t--){
-        ll n; cin>>n; 
+        int n; cin>>n; 
 
-        vll v(n); 
-        for(int i = 0; i < n; i++) cin>>v[i]; 
+        vp v;
+        
+        order_set <int> os; 
 
-        order_set <ll> os; 
-        ll ans = 0, c = 0;
         for(int i = 0; i < n; i++){
-            c++;
-            os.insert(v[i]);
-            ans += (c - os.order_of_key(v[i]) - 1);
+            pair<ll, ll> x;
+            cin>>x.first >> x.second; 
+            v.pub(x); 
+            os.insert(x.second); 
         }
 
-        cout << ans << endl;
+        sort(v.begin(), v.end(), cmp); 
+        // for (auto [x,y] : v){
+        //     cout << x << " " << y << endl; 
+        // }
+
+
+        ll ans = 0; 
+
+        for(int i = 0; i < n; i++){
+            // cout << os.order_of_key(v[i].second)<< endl; 
+            ans += os.order_of_key(v[i].second);
+            os.erase(v[i].second); 
+        }
+
+        cout << ans << endl; 
     }
     return 0; 
 }
